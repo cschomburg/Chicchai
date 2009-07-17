@@ -1,0 +1,7 @@
+## Interface: 30000
+## Title: Chicchai
+## Author: Lolzen (Cargor Branch)
+## Version: 3.0
+## Notes: Minimizes the Chat after a short amount of time.
+
+core.lua
