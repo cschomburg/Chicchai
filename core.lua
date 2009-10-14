@@ -58,7 +58,7 @@ local UP, DOWN = 1, -1
 local function getMinHeight(self)
 	local minHeight = 0
 	for i=1, minimizedLines do
-		local line = select(10+i, self:GetRegions())
+		local line = select(1+i, self:GetRegions())
 		if(line) then
 			minHeight = minHeight + line:GetHeight() + 2.5
 		end
