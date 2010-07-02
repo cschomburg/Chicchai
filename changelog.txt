@@ -1,3 +1,6 @@
+3.3.1
+*fixed chat height of messages spanning multiple lines
+
 3.3
 *fixes for 3.3.5
 *simpler event handling, including battle.net-events
