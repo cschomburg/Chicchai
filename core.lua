@@ -15,10 +15,9 @@ local LockInCombat = nil			-- Do not maximize in combat
 
 local MaximizeCombatLog = true		-- When the combat log is selected, it will be maximized
 
-FCF_ValidateChatFramePosition = function() end	-- You can move chat frames completely to the bottom
-
 -- Modify this to maximize only on special channels
 -- comment/remove it to react on all channels
+-- you still need the "channel"-event on your chat frame!
 local channelNumbers = {
 	[1] = true,
 	[2] = true,
@@ -27,26 +26,43 @@ local channelNumbers = {
 
 local ChatFrameConfig = {	-- Events which maximize the chat for the different windows
 	["ChatFrame1"] = {
---		"CHAT_MSG_CHANNEL",
---		"CHAT_MSG_OFFICER",
-		"CHAT_MSG_BG_SYSTEM_ALLIANCE",
-		"CHAT_MSG_BG_SYSTEM_HORDE",
-		"CHAT_MSG_BG_SYSTEM_NEUTRAL",
-		"CHAT_MSG_BATTLEGROUND",
-		"CHAT_MSG_BATTLEGROUND_LEADER",
-		"CHAT_MSG_PARTY",
-		"CHAT_MSG_RAID",
-		"CHAT_MSG_RAID_LEADER",
---		"CHAT_MSG_GUILD",
-		"CHAT_MSG_SAY",
-		"CHAT_MSG_SYSTEM",
-		"CHAT_MSG_WHISPER",
---		"CHAT_MSG_WHISPER_INFORM",
---		"CHAT_MSG_LOOT",
-		"CHAT_MSG_YELL",
+		"say", "emote", "text_emote",
+		"party", "party_leader", "party_guide",
+		"whisper",
+		"guild", "officer",
+		"battleground", "battleground_leader",
+		"raid", "raid_leader", "raid_warning",
+	
+		"bn_whisper",
+		"bn_conversation",
+		"bn_broadcast",
 	},
-	["ChatFrame3"] = true,
+	["ChatFrame3"] = true, -- "true" just makes this frame available for minimizing and registers it with Chicchai
 }
+
+--[[
+	REFERENCE LIST
+	These are the available chat events for ChatFrameConfig
+		say, yell, emote, text_emote,
+		party, party_leader, party_guide,
+		whisper, whisper_inform, afk, dnd, ignored,
+		guild, officer,
+		channel, channel_join, channel_leave, channel_list, channel_notice, channel_notice_user,
+		battleground, battleground_leader,
+		raid, raid_leader, raid_warning,
+
+		bn_whisper, bn_whisper_inform,
+		bn_conversation, bn_conversation_notice, bn_conversation_list,
+		bn_alert,
+		bn_broadcast, bn_broadcast_inform,
+		bn_inline_toast_alert, bn_inline_toast_broadcast, bn_inline_toast_broadcast_inform, bn_inline_toast_conversation,
+
+		system, achievement, guild_achievement,
+		bg_system_neutral, bg_system_alliance, bg_system_horde,
+		monster_say, monster_party, monster_yell, monster_whisper, monster_emote,
+		raid_boss_whisper, raid_boss_emote,
+		skill, loot, money, opening, tradeskills, pet_info, combat_misc_info, combat_xp_gain, combat_honor_gain, combat_faction_change,
+]]
 -- Configuration End
 -- Do not change anything under this line except you know what you're doing (:
 
@@ -58,7 +74,7 @@ local UP, DOWN = 1, -1
 local function getMinHeight(self)
 	local minHeight = 0
 	for i=1, minimizedLines do
-		local line = select(1+i, self:GetRegions())
+		local line = select(10+i, self:GetRegions())
 		if(line) then
 			minHeight = minHeight + line:GetHeight() + 2.5
 		end
@@ -98,7 +114,7 @@ end
 
 local function getChicchai(self)
 	if(self:GetObjectType() == "Frame") then self = self.Frame  end
-	if(self.isDocked) then self = DOCKED_CHAT_FRAMES[1] end
+	if(self.isDocked) then self = GENERAL_CHAT_DOCK.DOCKED_CHAT_FRAMES[1] end
 	return self.Chicchai
 end
 
@@ -156,7 +172,7 @@ if(MaximizeCombatLog) then
 	end)
 end
 
-local function UpdateHeight(self)
+local function updateHeight(self)
 	local self = getChicchai(self)
 	if(self.State ~= DOWN) then return end
 	self.Frame:ScrollToBottom()
@@ -183,6 +199,9 @@ for chatname, options in pairs(ChatFrameConfig) do
 	chatframe.Chicchai = chicchai
 	if(type(options) == "table") then
 		for _, event in pairs(options) do
+			if(not event:match("[A-Z]")) then
+				event = "CHAT_MSG_"..event:upper()
+			end
 			chicchai:RegisterEvent(event)
 		end
 	end
@@ -197,7 +216,7 @@ for chatname, options in pairs(ChatFrameConfig) do
 	chicchai:SetScript("OnEvent", chatEvent)
 	chicchai:Hide()
 
-	hooksecurefunc(chatframe, "AddMessage", UpdateHeight)
+	hooksecurefunc(chatframe, "AddMessage", updateHeight)
 end
 
 _G.Chicchai = ChatFrameConfig

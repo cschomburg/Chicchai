@@ -1,0 +1,32 @@
+3.3
+*fixes for 3.3.5
+*simpler event handling, including battle.net-events
+
+3.2
+*Prevent chat from resizing when moving it around
+
+3.1
+*TOC bump
+*Added new PartyLeader event to the eventlist
+
+3.0
+* Another rewrite
+* Chicchai now uses less CPU time
+* You can define how many lines you'd like to see in minimized mode
+* docked chatframes are now handled properly
+* fixed chat frame flickering happening sometimes on mouseover
+* you can define how long you should hover the frame until it maximizes
+* chatframes can stay maximized for a defined time before minimizing on mouseleave
+* you can configure on which custom channels the chatframe maximizes
+
+2.0
+*Core rewritten
+*You are now able to manage the chatframes you want to be affected (like chatframe 5, 6, 8, and so on)
+*TOC bump
+
+1.1
+*A few improvements
+*Now Updates when the Chat Window is too small or big
+
+1.0.1
+*Added Option, that the Chat will stay open for a defined time after mouseover 
