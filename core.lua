@@ -162,6 +162,8 @@ end
 if(MaximizeCombatLog) then
 	hooksecurefunc("FCF_Tab_OnClick", function(self)
 		local frame = getChicchai(ChatFrame2)
+		if(not frame) then return end
+
 		if(self == ChatFrame2Tab) then
 			Animate(frame, UP)
 			SetFrozen(frame, true)
@@ -209,12 +211,14 @@ for chatname, options in pairs(ChatFrameConfig) do
 	
 	chatframe.Maximize = Maximize
 	chatframe.Minimize = Minimize
-	chatframe.UpdateHeight = UpdateHeight
+	chatframe.UpdateHeight = updateHeight
 	chatframe.SetFrozen = SetFrozen
 
 	chicchai:SetScript("OnUpdate", Update)
 	chicchai:SetScript("OnEvent", chatEvent)
 	chicchai:Hide()
+
+	updateHeight(chatframe)
 
 	hooksecurefunc(chatframe, "AddMessage", updateHeight)
 end
