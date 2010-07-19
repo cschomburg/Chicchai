@@ -1,3 +1,8 @@
+3.3.2
+* try to minimize chat on load
+* Re-introduce ChatFrame:UpdateHeight() to manually update the height
+* fixed a possible error with the chat-tabs
+
 3.3.1
 *fixed chat height of messages spanning multiple lines
 
