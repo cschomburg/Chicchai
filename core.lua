@@ -218,7 +218,9 @@ for chatname, options in pairs(ChatFrameConfig) do
 	chicchai:SetScript("OnEvent", chatEvent)
 	chicchai:Hide()
 
-	updateHeight(chatframe)
+	if(getChicchai(chatframe) == chicchai) then
+		updateHeight(chatframe)
+	end
 
 	hooksecurefunc(chatframe, "AddMessage", updateHeight)
 end
